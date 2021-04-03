@@ -4,12 +4,13 @@ import "time"
 
 const (
 	Addr = "127.0.0.1"
-	Port = "22334"
+	BotPort = "22333"
+	WsPort = "22334"
 	LogPath = "./log"
 	LogFileName = "qqbot.log"
 )
 
-var Debug = false
+var Debug = true
 
 const (
 	// 允许等待的写入时间

@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/gorilla/websocket"
 	"net/http"
 	"rinqqbot/config"
@@ -63,7 +62,7 @@ func wsHandler(rsp http.ResponseWriter, req *http.Request) {
 	maxConnId++
 
 	// 连接数保持一定数量，超过的部分不提供服务
-	// 如果要控制连接数可以计算，WsConnAll长度
+	// 如果要控制连接数可以计算WsConnAll长度 len(WsConnAll)
 	wsConn := &wsConnection{
 		wsSocket:  wsSocket,
 		inChan:    make(chan *wsMessage, 1000),
@@ -120,7 +119,8 @@ func processLoop(wsConn *wsConnection) {
 		if err != nil {
 			log.Logger.Error("json信息解析错误", err.Error())
 		}
-		fmt.Println("收到消息：",msgData)
+		//log.Logger.Debug("收到消息：",msgData)
+		HandleWsMsg(msgData)
 	}
 }
 
