@@ -8,6 +8,7 @@ const (
 	WsPort = "22334"
 	LogPath = "./log"
 	LogFileName = "qqbot.log"
+	BotName = "rin酱"
 )
 
 var Debug = true
