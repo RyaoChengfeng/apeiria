@@ -1,13 +1,13 @@
 package util
 
 import (
+	"aperia/config"
+	"aperia/util/log"
 	"fmt"
-	"rinqqbot/util/log"
-	"rinqqbot/config"
 	"strconv"
 )
 
-var host =fmt.Sprintf(config.Addr +`:`+ config.BotPort)
+var host = fmt.Sprintf(config.Addr + `:` + config.BotPort)
 
 func SendPrivate(qq float64, msg string) {
 	qqstr := strconv.FormatFloat(qq, 'f', -1, 64)

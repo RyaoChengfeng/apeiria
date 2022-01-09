@@ -1,6 +1,8 @@
 package meta
 
-import "rinqqbot/util/log"
+import (
+	"aperia/util/log"
+)
 
 func CheckType(msg map[string]interface{}) {
 	switch msg["meta_event_type"] {
@@ -17,7 +19,7 @@ func CheckType(msg map[string]interface{}) {
 
 //心跳
 func heartbeat(msg map[string]interface{}) {
-
+	return
 }
 
 //生命周期

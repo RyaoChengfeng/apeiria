@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"rinqqbot/event/message"
-	"rinqqbot/event/meta"
+	"aperia/event/message"
+	"aperia/event/meta"
 )
 
 func HandleWsMsg(msg map[string]interface{}) {

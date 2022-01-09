@@ -3,15 +3,22 @@ package config
 import "time"
 
 const (
-	Addr = "127.0.0.1"
-	BotPort = "22333"
-	WsPort = "22334"
-	LogPath = "./log"
+	Addr        = "127.0.0.1"
+	BotPort     = "22333"
+	WsPort      = "22334"
+	LogPath     = "../log"
 	LogFileName = "qqbot.log"
-	BotName = "rin酱"
+	// 在config/private.go中配置（由于我懒得写配置读取了）
+	//BotName = "Aperia"
+	//GroupID = ""
+	//SuperUser = ""
+	//GroupID = ""
+	//R18 = "0"
 )
 
 var Debug = true
+
+var SetuAPI = "https://api.lolicon.app/setu/v2"
 
 const (
 	// 允许等待的写入时间

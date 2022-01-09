@@ -5,12 +5,12 @@ import (
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
 	"path"
-	"rinqqbot/config"
+	"aperia/config"
 	"time"
 )
 
 // 全局变量直接使用，logrus实现已带锁，使用样例如下：
-// import  ."src/util/log"
+// import  ."aperia/util/log"
 //  Logger.Info("msg")
 //  Logger.Debug("msg")
 //  Logger.Warn("msg")
@@ -39,7 +39,7 @@ func getLogger() *logrus.Logger {
 	//	LogFileName string
 	//}{"./log","logurs.log"}
 
-	baseLogPath := path.Join(config.LogPath,config.LogFileName)
+	baseLogPath := path.Join(config.LogPath, config.LogFileName)
 	writer, err := rotatelogs.New(
 		baseLogPath+".%Y-%m-%d-%H-%M",
 		rotatelogs.WithLinkName(baseLogPath),      // 生成软链，指向最新日志文件

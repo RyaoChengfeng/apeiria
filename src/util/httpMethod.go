@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"rinqqbot/util/log"
+	"aperia/util/log"
 )
 
 func HttpGet(url string) *http.Response {

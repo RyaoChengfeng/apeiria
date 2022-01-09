@@ -1,11 +1,12 @@
 package main
 
 import (
+	"aperia/config"
+	"aperia/controller"
+	"aperia/function/schedule"
 	"fmt"
 	"net/http"
 	"os"
-	"rinqqbot/config"
-	"rinqqbot/controller"
 )
 
 func main() {
@@ -15,6 +16,7 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	go schedule.Start()
 }
 
 
