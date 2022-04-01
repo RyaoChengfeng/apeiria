@@ -5,6 +5,7 @@ import (
 	"aperia/function/setu"
 	util2 "aperia/util"
 	"aperia/util/log"
+	"strconv"
 )
 
 func CheckType(msg map[string]interface{}) {
@@ -23,32 +24,37 @@ func CheckType(msg map[string]interface{}) {
 
 func handlePrivate(message map[string]interface{}) {
 	log.Logger.Debug("私聊消息", message["raw_message"])
-	userID, _ := CheckPrivateMessage(message["user_id"].(string))
-	if userID != config.SuperUser {
+	userID := strconv.FormatFloat(message["user_id"].(float64), 'f', -1, 64)
+	if util2.IsInStringList(userID, config.C.QQ.SuperUserList) {
 		return
 	}
 	funcName, _ := CheckPrivateMessage(message["raw_message"].(string))
 	switch funcName {
 	case "about":
-		util2.SendPrivate(message["user_id"].(float64), "hello")
+		util2.SendPrivate(userID, "hello")
 	//case `yunbanke`:
 	//	util2.SendPrivate(message["user_id"].(float64), "请输入您的账号和密码以开始签到, 格式为：\\云班课自动签到 账号:密码:持续时间")
 	//case `start_yunbanke`:
 	//	util2.SendPrivate(message["user_id"].(float64), "开始自动签到")
 	////yunbanke.YunBankeCheckIn(data[0],data[1],data[2])
 	case `nil`:
-		util2.SendPrivate(message["user_id"].(float64), config.BotName+"目前不清楚你在说什么哦")
+		util2.SendPrivate(userID, config.C.Bot.Name+"目前不清楚你在说什么哦")
 	}
 }
 
 func handleGroup(message map[string]interface{}) {
-	log.Logger.Debug("群组消息", message["raw_message"])
+	log.Logger.Debug("群组消息：", message["raw_message"])
 	funcName, _ := CheckGroupMessage(message["raw_message"].(string))
-	groupID := message["user_id"].(string)
-	if util2.IsInStringList(groupID, config.GroupList) {
+	groupID := strconv.FormatFloat(message["group_id"].(float64), 'f', -1, 64)
+	//fmt.Println("GroupID:", groupID)
+	if util2.IsInStringList(groupID, config.C.QQ.GroupList) {
+		//fmt.Println("funcName:", funcName)
 		switch funcName {
 		case "setu":
+			log.Logger.Debug("发送图片到：", groupID)
 			setu.SendGroupSetu(groupID)
+		case "echo":
+			util2.SendGroup(groupID, message["raw_message"].(string))
 		}
 	}
 }
@@ -89,6 +95,8 @@ func CheckGroupMessage(msgStr string) (string, []string) {
 	default:
 		if util2.CheckRegexpMatch("来[张点][色涩]图|[涩色]图来|想要[涩色]图|[涩色]图[Tt][Ii][Mm][Ee]", msgStr) {
 			return "setu", nil
+		} else if util2.CheckRegexpMatch("echo", msgStr) {
+			return "echo", nil
 		}
 		return "nil", nil
 	}

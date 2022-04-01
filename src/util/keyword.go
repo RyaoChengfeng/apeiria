@@ -30,6 +30,15 @@ func IsInStringList(key string, List []string) bool {
 	return false
 }
 
+func IsInFloatList(key float64, List []float64) bool {
+	for _, k := range List {
+		if key == k {
+			return true
+		}
+	}
+	return false
+}
+
 // Returns an int >= min, < max
 func randomInt(min, max int) int {
 	return min + rand.Intn(max-min)

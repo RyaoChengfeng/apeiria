@@ -26,3 +26,8 @@ out
 gen
 
 /log
+
+.vscode
+config/private.go
+env/prod.yml
+env/dev.yml

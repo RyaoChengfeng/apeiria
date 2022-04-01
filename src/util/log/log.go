@@ -1,75 +1,100 @@
 package log
 
 import (
-	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
-	"github.com/rifflock/lfshook"
-	"github.com/sirupsen/logrus"
-	"path"
 	"aperia/config"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"os"
+	"path"
 	"time"
 )
 
-// 全局变量直接使用，logrus实现已带锁，使用样例如下：
-// import  ."aperia/util/log"
+// Logger is a global variable
+//  import . "github.com/casbin/casnode/util"
 //  Logger.Info("msg")
 //  Logger.Debug("msg")
 //  Logger.Warn("msg")
 //  Logger.Error("msg")
 //  Logger.Fatal("msg")
-var Logger *logrus.Logger
+var Logger *zap.SugaredLogger
 
 func init() {
 	Logger = getLogger()
 	if Logger == nil {
-		panic("Logger 初始化失败")
+		panic("Logger initialization failed")
 	}
-	Logger.Info("Logger 初始化成功！")
+	Logger.Info("Logger initialization succeeded!")
 }
 
-func getLogger() *logrus.Logger {
-	logger := logrus.New()
-	logger.Formatter = new(logrus.JSONFormatter)
-	logger.SetReportCaller(true)
-	if config.Debug {
-		logger.SetLevel(logrus.DebugLevel)
+func getLogger() *zap.SugaredLogger {
+	// print log to console
+	consoleEncoder := zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
+	consoleWriter := zapcore.Lock(os.Stdout)
+	// write log to file
+	encoder := getEncoder()
+	writeSyncer := getLogWriter()
+	// zapcore.DebugLevel set default log level to DEBUG
+	var allCore []zapcore.Core
+
+	if config.C.Debug {
+		allCore = append(allCore, zapcore.NewCore(consoleEncoder, consoleWriter, zapcore.DebugLevel))
+		allCore = append(allCore, zapcore.NewCore(encoder, writeSyncer, zapcore.DebugLevel))
+	} else {
+		allCore = append(allCore, zapcore.NewCore(encoder, writeSyncer, zapcore.InfoLevel))
+	}
+	core := zapcore.NewTee(allCore...)
+
+	// zap.AddCaller() add the feature to log calling function information to the log.
+	logger := zap.New(core, zap.AddCaller())
+
+	return logger.Sugar()
+}
+
+func getEncoder() zapcore.Encoder {
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder // use ISO8601TimeEncoder
+
+	// Use uppercase letters to record log levels in log files
+	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	// NewJsonEncoder return a zapcore.Encoder that writes key-value pairs in a JSON format.
+	return zapcore.NewJSONEncoder(encoderConfig)
+}
+
+func getLogWriter() zapcore.WriteSyncer {
+	var logPath, logFile string
+	if config.C.LogConf.LogPath == "" {
+		logPath = "../logs"
+	} else {
+		logPath = config.C.LogConf.LogPath
+	}
+	if config.C.LogConf.LogFile == "" {
+		logFile = "qqbot.log"
+	} else {
+		logFile = config.C.LogConf.LogFile
 	}
 
-	//var logConfig = struct {
-	//	LogPath string
-	//	LogFileName string
-	//}{"./log","logurs.log"}
+	baseLogPath := path.Join(logPath, logFile)
 
-	baseLogPath := path.Join(config.LogPath, config.LogFileName)
+	// create log file
+	_, err := os.Stat(baseLogPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			err := os.MkdirAll(logPath, os.ModePerm)
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
 	writer, err := rotatelogs.New(
 		baseLogPath+".%Y-%m-%d-%H-%M",
-		rotatelogs.WithLinkName(baseLogPath),      // 生成软链，指向最新日志文件
-		rotatelogs.WithMaxAge(7*24*time.Hour),     // 文件最大保存时间
-		rotatelogs.WithRotationTime(24*time.Hour), // 日志切割时间间隔
+		rotatelogs.WithLinkName(baseLogPath),      // generate a soft link pointing to the latest log file
+		rotatelogs.WithMaxAge(30*24*time.Hour),    // maximum file save time, 30 days
+		rotatelogs.WithRotationTime(24*time.Hour), // log rotating interval
 	)
 	if err != nil {
-		logger.Fatal(err)
+		panic(err)
 	}
 
-	lfHook := lfshook.NewHook(lfshook.WriterMap{
-		logrus.DebugLevel: writer, // 为不同级别设置不同的输出目的
-		logrus.InfoLevel:  writer,
-		logrus.WarnLevel:  writer,
-		logrus.ErrorLevel: writer,
-		logrus.FatalLevel: writer,
-		logrus.PanicLevel: writer,
-	}, &logrus.JSONFormatter{})
-
-	logger.AddHook(lfHook)
-	return logger
+	return zapcore.AddSync(writer)
 }
-
-//Logger 自定义封装的形式
-//func writeLog(fileName, funcName, errMsg, from string, err error) {
-//	Logger.WithFields(logrus.Fields{
-//		"package":  "package_name",
-//		"file":     fileName,
-//		"function": funcName,
-//		"err":      err,
-//		"from":     from,
-//	}).Warn(errMsg)
-//}

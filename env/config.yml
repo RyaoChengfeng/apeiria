@@ -1,0 +1,22 @@
+bot:
+  addr: "http://127.0.0.1"
+  bot_port: ""
+  ws_port: ""
+logConf:
+  log_path: "../logs"
+  log_file: "qqbot.log"
+setu:
+  api: "https://api.lolicon.app/setu/v2"
+  r18: "0"
+  size: ""
+  image_path: "../images"
+qq:
+  group_list:
+    - "123456789"
+  user_list:
+    - "123456789"
+  super_user:
+    - "123456789"
+
+proxy: ""
+debug: true

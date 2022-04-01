@@ -3,10 +3,12 @@ package controller
 import (
 	"aperia/event/message"
 	"aperia/event/meta"
+	"aperia/util/log"
 )
 
 func HandleWsMsg(msg map[string]interface{}) {
 	// fmt.Println(msg)
+	log.Logger.Debug("go协程创建")
 	switch msg["post_type"] {
 	case "message":
 		//消息事件
@@ -27,4 +29,5 @@ func HandleWsMsg(msg map[string]interface{}) {
 	default:
 		break
 	}
+	log.Logger.Debug("go协程结束")
 }

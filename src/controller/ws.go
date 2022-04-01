@@ -1,12 +1,12 @@
 package controller
 
 import (
+	"aperia/config"
+	"aperia/util/log"
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/websocket"
 	"net/http"
-	"aperia/config"
-	"aperia/util/log"
 	"sync"
 	"time"
 )
@@ -129,7 +129,7 @@ func processLoop(wsConn *wsConnection) {
 			log.Logger.Error("json信息解析错误", err.Error())
 		}
 		log.Logger.Debug("收到消息：", msgData)
-		HandleWsMsg(msgData)
+		go HandleWsMsg(msgData)
 	}
 }
 
@@ -219,7 +219,7 @@ func (wsConn *wsConnection) close() {
 func StartWebsocket() {
 	WsConnAll = make(map[int64]*wsConnection)
 	http.HandleFunc("/", wsHandler)
-	err := http.ListenAndServe(config.Addr+`:`+config.WsPort, nil)
+	err := http.ListenAndServe(config.C.Bot.Addr+`:`+config.C.Bot.WsPort, nil)
 	if err != nil {
 		log.Logger.Error(err)
 		// 重启服务

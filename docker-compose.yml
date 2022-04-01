@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  app:
+    image: registry.cn-hangzhou.aliyuncs.com/bingyan/fleamarket:v1.3.1
+    environment:
+      - TZ=Asia/Shanghai
+      - ENV=config
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./src:/app
+      - ./env:/env
+      - ./logs:/logs
+      - ./images:/images
+    container_name: apeiria
+    network_mode: host
