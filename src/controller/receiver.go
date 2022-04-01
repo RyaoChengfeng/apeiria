@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"aperia/event/message"
-	"aperia/event/meta"
-	"aperia/util/log"
+	"apeiria/event/message"
+	"apeiria/event/meta"
+	"apeiria/util/log"
 )
 
 func HandleWsMsg(msg map[string]interface{}) {

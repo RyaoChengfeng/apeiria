@@ -1,7 +1,7 @@
 package meta
 
 import (
-	"aperia/util/log"
+	"apeiria/util/log"
 )
 
 func CheckType(msg map[string]interface{}) {

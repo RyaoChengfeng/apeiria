@@ -1,8 +1,8 @@
 package setu
 
 import (
-	"aperia/util"
-	"aperia/util/log"
+	"apeiria/util"
+	"apeiria/util/log"
 )
 
 func SendGroupSetu(groupID string) {

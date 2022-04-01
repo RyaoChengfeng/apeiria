@@ -1,7 +1,7 @@
 package schedule
 
 import (
-	"aperia/util/log"
+	"apeiria/util/log"
 )
 
 func Start() {

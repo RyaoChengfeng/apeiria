@@ -1,12 +1,12 @@
 package util
 
 import (
-	"aperia/config"
-	"aperia/util/log"
+	"apeiria/config"
+	"apeiria/util/log"
 	"fmt"
 )
 
-var host = fmt.Sprintf(config.C.Bot.Addr + `:` + config.C.Bot.BotPort)
+var host = fmt.Sprintf(config.HTTP + config.C.Bot.Addr + `:` + config.C.Bot.BotPort)
 
 func SendPrivate(qq string, msg string) {
 	_ = HttpGet(host + "/send_private_msg?user_id=" + qq + "&message=" + msg)

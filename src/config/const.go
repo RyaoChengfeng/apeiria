@@ -3,6 +3,13 @@ package config
 import "time"
 
 const (
+	HTTP  = "http://"
+	HTTPS = "https://"
+	FILE  = "file://"
+	WS    = "ws://"
+)
+
+const (
 	// 允许等待的写入时间
 	WriteWait = 10 * time.Second
 	// Time allowed to read the next pong message from the peer.

@@ -1,7 +1,7 @@
 bot:
-  addr: "http://127.0.0.1"
-  bot_port: ""
-  ws_port: ""
+  addr: "127.0.0.1"
+  bot_port: "6575"
+  ws_port: "22334"
 logConf:
   log_path: "../logs"
   log_file: "qqbot.log"

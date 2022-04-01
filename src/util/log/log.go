@@ -1,7 +1,7 @@
 package log
 
 import (
-	"aperia/config"
+	"apeiria/config"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

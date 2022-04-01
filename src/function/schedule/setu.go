@@ -1,9 +1,9 @@
 package schedule
 
 import (
-	"aperia/config"
-	"aperia/util"
-	"aperia/util/log"
+	"apeiria/config"
+	"apeiria/util"
+	"apeiria/util/log"
 	"github.com/robfig/cron/v3"
 )
 

@@ -1,10 +1,10 @@
 package message
 
 import (
-	"aperia/config"
-	"aperia/function/setu"
-	util2 "aperia/util"
-	"aperia/util/log"
+	"apeiria/config"
+	"apeiria/function/setu"
+	util2 "apeiria/util"
+	"apeiria/util/log"
 	"strconv"
 )
 

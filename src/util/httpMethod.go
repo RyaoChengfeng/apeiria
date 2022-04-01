@@ -1,7 +1,7 @@
 package util
 
 import (
-	"aperia/util/log"
+	"apeiria/util/log"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"

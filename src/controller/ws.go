@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"aperia/config"
-	"aperia/util/log"
+	"apeiria/config"
+	"apeiria/util/log"
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/websocket"
